@@ -5,46 +5,36 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hassende <hassende@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/22 16:42:50 by hassende          #+#    #+#             */
-/*   Updated: 2024/12/24 23:00:46 by hassende         ###   ########.fr       */
+/*   Created: 2024/12/25 21:03:13 by hassende          #+#    #+#             */
+/*   Updated: 2024/12/28 20:54:47 by hassende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	init_philos(t_params *params, t_philo **philos)
+void	clean_table(t_param *table)
 {
-	int	i;
+	int i;
 
-	i = 0;
-	*philos = malloc(sizeof(t_philo) * params->nb_philo);
-	if (!*philos)
-		return ;
-	while (i < params->nb_philo)
-	{
-		(*philos)[i].id = i + 1;
-		(*philos)[i].params = params;
-		i++;
-	}
+	i = -1;
+	while (++i < table->philo_nb)
+		pthread_mutex_destroy(&table->forks[i].mutex);
+	free(table->forks);
+	free(table->philos);
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char *argv[])
 {
-	t_params	*params;
-	t_philo		*philos;
+	t_param	param;
 
-	if (argc < 5 || argc > 6)
+	if (argc < 5 || argc > 6 || !check_input(argv))
 	{
-		write(1, "Error: wrong number of arguments\n", 33);
+		write (2, "wrong input\n", 13);
 		return (1);
 	}
-	params = malloc(sizeof(t_params));
-	if (!params)
-		return (1);
-	parge_args(argc, argv, params);
-	init_philos(params, &philos);
-	init_threads(params, philos);
-	free(philos);
-	free(params);
+	init_param(&param, argv);
+	table_init(&param);
+	table_start(&param);
+	clean_table(&param);
 	return (0);
 }

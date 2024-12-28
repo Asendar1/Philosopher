@@ -5,17 +5,33 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hassende <hassende@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/24 22:48:18 by hassende          #+#    #+#             */
-/*   Updated: 2024/12/24 22:48:23 by hassende         ###   ########.fr       */
+/*   Created: 2024/12/25 21:09:38 by hassende          #+#    #+#             */
+/*   Updated: 2024/12/28 20:57:52 by hassende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long int	time_now(void)
+int	check_input(char **argv)
 {
-	struct timeval	now;
+	long	buffer;
+	int		i;
 
-	gettimeofday(&now, NULL);
-	return ((now.tv_sec * 1000) + (now.tv_usec / 1000));
+	i = 1;
+	while (argv[i])
+	{
+		buffer = ft_atoi(argv[i]);
+		if (buffer == LONG_MAX)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+long	get_time()
+{
+	struct timeval time;
+
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec / 1000) + (time.tv_usec * 1000));
 }

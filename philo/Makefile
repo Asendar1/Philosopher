@@ -1,4 +1,4 @@
-SRC_FILES = main.c parser.c threads.c utils.c
+SRC_FILES = main.c param.c philo.c simulation.c utils.c
 SRCS_DIR = sources/
 
 SRCS = $(addprefix $(SRCS_DIR), $(SRC_FILES))
