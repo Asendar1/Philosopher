@@ -14,17 +14,17 @@ CFLAGS = -Wall -Wextra -Werror -g -pthread -Iincludes
 all : $(NAME)
 
 $(NAME) : $(OBJS)
-	@$(CC) $(OBJS) -o $(NAME)
+	$(CC) $(OBJS) -o $(NAME)
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c
-	@mkdir -p $(OBJS_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	mkdir -p $(OBJS_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
-	@rm -rf $(OBJS_DIR)
+	rm -rf $(OBJS_DIR)
 
 fclean : clean
-	@rm -f $(NAME)
+	rm -f $(NAME)
 
 re: fclean all
 

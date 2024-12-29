@@ -6,7 +6,7 @@
 /*   By: hassende <hassende@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 15:45:35 by hassende          #+#    #+#             */
-/*   Updated: 2024/12/28 21:04:32 by hassende         ###   ########.fr       */
+/*   Updated: 2024/12/29 17:05:36 by hassende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,16 @@ static void	philo_init(t_param *table)
 	}
 }
 
+int	simulation_finished(t_param *table)
+{
+	int	finished;
+
+	pthread_mutex_lock(&table->death_lock);
+	finished = table->end;
+	pthread_mutex_unlock(&table->death_lock);
+	return (!finished);
+}
+
 void	table_init(t_param *table)
 {
 	int	i;
@@ -42,10 +52,13 @@ void	table_init(t_param *table)
 	table->end = 0;
 	table->philos = malloc(sizeof(t_philo) * table->philo_nb);
 	table->forks = malloc(sizeof(t_fork) * table->philo_nb);
-	while(++i > table->philo_nb)
+	pthread_mutex_init(&table->print_lock, NULL);
+	pthread_mutex_init(&table->death_lock, NULL);
+	pthread_mutex_init(&table->start_mutex, NULL);
+	while(++i < table->philo_nb)
 	{
-		pthread_mutex_init(&table->forks->mutex, NULL);
-		table->forks->fork_id = i;
+		pthread_mutex_init(&table->forks[i].mutex, NULL);
+		table->forks[i].fork_id = i;
 	}
 	philo_init(table);
 }

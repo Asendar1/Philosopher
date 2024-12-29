@@ -6,7 +6,7 @@
 /*   By: hassende <hassende@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/25 20:49:08 by hassende          #+#    #+#             */
-/*   Updated: 2024/12/28 21:03:15 by hassende         ###   ########.fr       */
+/*   Updated: 2024/12/29 17:42:17 by hassende         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_param
 	int				end;
 	int				start_simulation;
 	long			start_time;
+	pthread_t		monitor;
 	t_fork			*forks;
 	t_philo			*philos;
 	pthread_mutex_t print_lock;
@@ -57,13 +58,25 @@ typedef struct s_param
 	pthread_mutex_t	start_mutex;
 }				t_param;
 
+typedef enum e_status
+{
+	FORK,
+	EATING,
+	SLEEPING,
+	THINKING,
+	DEAD
+}			t_status;
+
 void		init_param(t_param *param, char *argv[]);
 void		table_init(t_param *table);
 void		clean_table(t_param *table);
-void		*routine(void *data);
 void		eat_routine(t_philo *philo);
 void		lonly_philo(t_philo *philo);
 void		print_status(t_philo *philo, char *status);
+void		write_handle(t_status status, t_philo *philo);
+void	*monitor_dinner(void *data);
+void		*routine(void *data);
+int			simulation_finished();
 int			check_input(char **argv);
 int			check_death(t_philo *philo);
 int			table_start(t_param *table);

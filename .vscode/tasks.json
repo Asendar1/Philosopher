@@ -1,0 +1,13 @@
+{
+	"tasks": [
+	  {
+		"type": "shell",
+		"label": "build",
+		"command": "make",
+		"args": [],
+		"options": {
+		  "cwd": "${workspaceFolder}/philo"
+		}
+	  }
+	]
+  }
