@@ -1,29 +1,30 @@
-SRC_FILES = main.c param.c philo.c simulation.c utils.c
+SRCS_FILES = main.c init.c monitor.c routine.c threads.c utils.c
 SRCS_DIR = sources/
-
-SRCS = $(addprefix $(SRCS_DIR), $(SRC_FILES))
+SRCS = $(addprefix $(SRCS_DIR), $(SRCS_FILES))
 
 OBJS_DIR = objects/
-OBJS = $(addprefix $(OBJS_DIR), $(SRC_FILES:.c=.o))
+OBJS = $(addprefix $(OBJS_DIR), $(SRCS_FILES:.c=.o))
 
 NAME = philo
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -pthread -Iincludes
+CFLAGS = -Wall -Wextra -Werror -pthread -Iincludes
 
-all : $(NAME)
+HEADER = includes/philo.h
 
-$(NAME) : $(OBJS)
-	$(CC) $(OBJS) -o $(NAME)
+all: $(NAME)
 
-$(OBJS_DIR)%.o : $(SRCS_DIR)%.c
+$(NAME): $(OBJS) $(HEADER)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+
+$(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	mkdir -p $(OBJS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-clean :
+clean:
 	rm -rf $(OBJS_DIR)
 
-fclean : clean
+fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
